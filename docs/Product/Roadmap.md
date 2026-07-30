@@ -27,7 +27,7 @@ This document serves as a RoadMap through the lifecycle of this project.
 > *System Design* <br />
 >
 > Plan and Create Documentation. Includes:
-> - 🟦 Repository Structure
+> - ✅ Repository Structure
 > - ✅ Finalise High Level Architecture
 > - ✅ Finalise Coding Practices
 > - ✅ Select and Finalise Tech Stack
@@ -39,7 +39,7 @@ This document serves as a RoadMap through the lifecycle of this project.
 > *Project Bootstrap* <br/>
 >
 > **Backend**
-> - FastAPI project
+> - ✅ FastAPI project
 > - Configuration system (Global YAML)
 > - Logging Format
 > - Exception handling
