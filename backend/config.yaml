@@ -1,0 +1,7 @@
+app:
+    name: Xenon
+    version: 0.0.0
+
+server:
+    host: localhost
+    port: 8080
