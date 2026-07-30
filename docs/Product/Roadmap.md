@@ -30,7 +30,7 @@ This document serves as a RoadMap through the lifecycle of this project.
 > - 🟦 Repository Structure
 > - ✅ Finalise High Level Architecture
 > - ✅ Finalise Coding Practices
-> - 🟨 Select and Finalise Tech Stack
+> - ✅ Select and Finalise Tech Stack
 
 <br/>
 
