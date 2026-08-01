@@ -1,11 +1,11 @@
-from functools import lru_cache
 from dataclasses import dataclass
-
-from .config_models import Config
-from .secrets_models import Secrets
+from functools import lru_cache
 
 from .config_loader import load_config
+from .config_models import Config
 from .secrets_loader import load_secrets
+from .secrets_models import Secrets
+
 
 @dataclass(frozen=True)
 class Settings:
@@ -15,9 +15,7 @@ class Settings:
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings(
-        config=load_config(),
-        secrets=load_secrets()
-    )
+    return Settings(config=load_config(), secrets=load_secrets())
+
 
 settings = get_settings()
