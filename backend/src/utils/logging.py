@@ -1,7 +1,23 @@
+"""
+This file defines our global custom logging format.
+Utilises colorlog for color-coded logs and
+a custom JSON design 
+"""
+
 from logging.config import dictConfig
 
 
 def setup_logging(level: str = "INFO") -> None:
+    """
+    Define the Custom Logging Format
+
+    Args:
+        level: The log-level for the logs (set to INFO)
+    
+    Returns:
+        None
+    """
+
     dictConfig(
         {
             "version": 1,
