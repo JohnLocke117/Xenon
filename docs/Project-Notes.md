@@ -1,7 +1,9 @@
 # Xenon Project Notes
 
 ### Docstring Format
+
 It is mandatory to add a proper docstring at:
+
 - Module Level (Top of File)
 - Functions
 - Classes
@@ -9,49 +11,47 @@ It is mandatory to add a proper docstring at:
 In this project, we're going ahead with Google-Styled Docstrings:
 
 ```python
-def calculate_velocity(distance: float, time: float) -> float:
-    """
-    Calculates the Average Velocity of a moving object.
+"""
+<One-line summary of the module's responsibility>.
 
-    This section provides an optional extended description of the 
-    function and its overall purpose.
-
-    Args:
-        distance: The total physical distance covered in meters
-        time: The total time duration taken in seconds
-    
-    Returns:
-        The computed average velocity in meters per second
-    
-    Raises:
-        ValueError: If the time parameter is less than or equal to zero.
-    """
-
-    if time <= 0:
-        raise ValueError("Time must be a non-zero positive value")
-    
-    return distance / time
+<Optional extended description: key concepts, how it fits in the app, important dependencies or side effects. 1–3 sentences max unless warranted.>
+"""
 ```
 
 ```python
-class SmartDevice:
-    """Represents a basic connected household IoT appliance.
+def fn(arg: str, *, flag: bool = False) -> ReturnType:
+    """
+    <Imperative summary>
 
-    Class docstrings summarize the object's purpose. Public attributes
-    are explicitly declared in the Attributes section.
+    <Optional extended description.>
+
+    Args:
+        arg: <What it represents, constraints, valid values.>
+        flag: <What it controls.>
+
+    Returns:
+        <What is returned and when.>
+
+    Raises:
+        <ExceptionType>: <When/why.>
+
+    Yields:
+        <For generators/async generators — what each iteration produces.>
+    """
+```
+
+```python
+class MyClass:
+    """
+    <One-line summary of what this type represents or does>.
+
+    <Optional extended description.>
 
     Attributes:
-        device_id: A unique string identifier for the hardware.
-        status: The current operational state (e.g., "online").
+        field_name: <Meaning, not just the type.>
+
+    Note:
+        <Important behaviour, invariants, or side effects.>
     """
-
-    def __init__(self, device_id: str):
-        """Initializes the SmartDevice instance.
-
-        Args:
-            device_id: The unique identifier assigned to the hardware.
-        """
-        self.device_id = device_id
-        self.status = "offline"
 ```
 

@@ -42,7 +42,7 @@ This document serves as a RoadMap through the lifecycle of this project.
 > - ✅ FastAPI project
 > - ✅ Configuration system (Global YAML)
 > - ✅ Logging Format
-> - Exception handling
+> - Exception handling + RFC 9457 API Error Details
 > - Docstrings for all Files, Functions, Classes
 > - Health endpoint (GET /health)
 > - Dependency injection structure
