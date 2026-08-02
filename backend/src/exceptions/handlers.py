@@ -9,8 +9,8 @@ via app.add_exception_handler() in main.py.
 import logging
 
 from fastapi import Request
-from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 from .base import AppException
 from .problem_detail import ProblemDetail

@@ -5,9 +5,9 @@ Each class maps a domain error to a specific HTTP status and RFC 9457 title.
 Raise these from routes and services instead of FastAPI's HTTPException.
 """
 
-from typing import Any, Optional, Dict
 
 from .base import AppException
+
 
 class NotFoundError(AppException):
     """

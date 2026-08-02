@@ -7,7 +7,9 @@ are supported via Pydantic's `extra="allow"` configuration.
 """
 
 from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field
+
 
 class ProblemDetail(BaseModel):
     """

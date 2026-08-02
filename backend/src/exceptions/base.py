@@ -6,9 +6,10 @@ extend AppException. Each exception carries HTTP semantics and can be
 converted to an RFC 9457 ProblemDetail via to_problem().
 """
 
-from typing import Optional, Any, Dict
+from typing import Any
 
 from .problem_detail import ProblemDetail
+
 
 class AppException(Exception):
     """
@@ -33,8 +34,8 @@ class AppException(Exception):
     def __init__(
         self,
         detail: str = "An unexpected error occurred",
-        type_uri: Optional[str] = None,
-        extensions: Optional[Dict[str, Any]] = None
+        type_uri: str | None = None,
+        extensions: dict[str, Any] | None = None
     ) -> None:
         """
         Initialise an application exception
