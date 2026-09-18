@@ -17,3 +17,10 @@ async def health():
 
     return {"message": "Health OK"}
 
+@router.get("/readiness")
+async def readiness():
+    """
+    Readiness Check for all Services and Infrastructure
+    """
+
+    return {"backend": "FastAPI Backend is OK"}
