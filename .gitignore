@@ -1,0 +1,6 @@
+# Secrets
+.env
+
+# Cache and Temporary Files
+__pycache__
+.venv

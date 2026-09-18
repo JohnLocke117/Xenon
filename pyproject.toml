@@ -1,0 +1,47 @@
+[project]
+name = "Xenon"
+version = "0.0.0"
+description = "A Complete Knowledge OS"
+readme = "README.md"
+authors = [
+    { name = "Varun", email = "varunarya119@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.18.5",
+    "colorlog>=6.12.0",
+    "fastapi>=0.141.1",
+    "psycopg2>=2.9.12",
+    "pydantic-settings>=2.14.2",
+    "pyyaml>=6.0.3",
+    "sqlalchemy>=2.0.51",
+    "uvicorn>=0.52.0",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle Errors
+    "F",   # Pyflakes
+    "I",   # Import sorting
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+]
+
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
