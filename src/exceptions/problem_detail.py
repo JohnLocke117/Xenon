@@ -14,7 +14,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class ProblemDetail(BaseModel):
     """
     RFC 9457 Problem Details JSON object
-    
+
     Represents the standard error payload returned by all API exception
     handlers. Extension members may be supplied as additional keyword
     arguments and are serialized at the top level of the JSON object.
@@ -38,7 +38,7 @@ class ProblemDetail(BaseModel):
     def model_dump(self, **kwargs: Any) -> dict[str, Any]:
         """
         Generate a dictionary representation of the problem detail model
-        
+
         Returns:
             A dictionary of the RFC 9457 Problem Detail Model
         """

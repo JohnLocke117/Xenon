@@ -7,12 +7,14 @@ Endpoints Included:
 """
 
 import asyncio
+
 from fastapi import APIRouter, Response, status
 
+from src.api.routers.models.system_model import CheckResult, HealthCheckResponse, ReadinessResponse
 from src.db.health import check_postgres
-from src.api.routers.models.system_model import HealthCheckResponse, CheckResult, ReadinessResponse
 
 router = APIRouter()
+
 
 # ----- GET /health: Health Check -----
 @router.get("/health", response_model=HealthCheckResponse)
@@ -28,9 +30,8 @@ async def health() -> HealthCheckResponse:
 
 
 # ----- GET /readiness: All Services Readiness Check -----
-CHECKS = [
-    ("postgres", check_postgres)
-]
+CHECKS = [("postgres", check_postgres)]
+
 
 @router.get("/readiness", response_model=ReadinessResponse)
 async def readiness(response: Response) -> ReadinessResponse:
@@ -46,16 +47,12 @@ async def readiness(response: Response) -> ReadinessResponse:
     """
 
     checks: dict[str, CheckResult] = {}
-    
+
     for name, fn in CHECKS:
         result = await asyncio.to_thread(fn)
         checks[name] = CheckResult(**result)
-    
+
     all_up = all(c.status == "up" for c in checks.values())
     response.status_code = status.HTTP_200_OK if all_up else status.HTTP_503_SERVICE_UNAVAILABLE
 
-    return ReadinessResponse(
-        status="ready" if all_up else "not_ready",
-        checks=checks
-    )
-
+    return ReadinessResponse(status="ready" if all_up else "not_ready", checks=checks)

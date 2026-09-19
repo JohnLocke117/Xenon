@@ -19,9 +19,9 @@ class UvicornAccessLogFilter(logging.Filter):
             # Uvicorn access log args:
             # (client_addr, method, path, http_version, status_code)
             status_code = record.args[4]
-        except(IndexError, TypeError):
+        except IndexError, TypeError:
             return True
-        
+
         # Set the Log Level
         if status_code >= 400:
             record.levelno = logging.WARNING
@@ -29,7 +29,7 @@ class UvicornAccessLogFilter(logging.Filter):
         elif status_code >= 500:
             record.levelno = logging.ERROR
             record.levelname = "ERROR"
-        
+
         return True
 
 
