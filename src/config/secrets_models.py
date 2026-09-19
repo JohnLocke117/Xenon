@@ -15,7 +15,7 @@ class Secrets(BaseSettings):
     """
     Defines the secrets loaded from backend/.env
     """
-    
+
     DB_USER: str
     DB_PASSWORD: str
     DB_HOST: str

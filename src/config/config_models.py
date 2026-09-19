@@ -16,6 +16,7 @@ class AppConfig(BaseModel):
     """
     General Application Configuration
     """
+
     name: str
     version: str
 
@@ -24,6 +25,7 @@ class ServerConfig(BaseModel):
     """
     Backend FastAPI Server Configuration
     """
+
     host: str
     port: int
 
@@ -32,5 +34,6 @@ class Config(BaseModel):
     """
     Final `Config` class that contains the whole configuration
     """
+
     app: AppConfig
     server: ServerConfig

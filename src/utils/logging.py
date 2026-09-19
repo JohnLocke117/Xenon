@@ -2,7 +2,35 @@
 Defines a custom color-coded logging format using colorlog
 """
 
+import logging
 from logging.config import dictConfig
+
+
+class UvicornAccessLogFilter(logging.Filter):
+    """
+    Set Uvicorn Access Log level based on Error Code
+    """
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if not record.args:
+            return True
+
+        try:
+            # Uvicorn access log args:
+            # (client_addr, method, path, http_version, status_code)
+            status_code = record.args[4]
+        except IndexError, TypeError:
+            return True
+
+        # Set the Log Level
+        if status_code >= 400:
+            record.levelno = logging.WARNING
+            record.levelname = "WARNING"
+        elif status_code >= 500:
+            record.levelno = logging.ERROR
+            record.levelname = "ERROR"
+
+        return True
 
 
 def setup_logging(level: str = "INFO") -> None:
@@ -23,9 +51,6 @@ def setup_logging(level: str = "INFO") -> None:
                     "format": (
                         "%(asctime)s | "
                         "%(log_color)s%(levelname)-8s%(reset)s | "
-                        "PID:%(process)-6d | "
-                        "%(name)-20s | "
-                        "%(filename)-12s:%(lineno)-4d | "
                         "%(message_log_color)s%(message)s%(reset)s"
                     ),
                     "datefmt": "%d-%m-%Y %H:%M:%S",
@@ -47,10 +72,20 @@ def setup_logging(level: str = "INFO") -> None:
                     },
                 }
             },
+            "filters": {
+                "uvicorn_access_level": {
+                    "()": UvicornAccessLogFilter,
+                },
+            },
             "handlers": {
                 "console": {
                     "class": "logging.StreamHandler",
                     "formatter": "colored",
+                },
+                "uvicorn_access_console": {
+                    "class": "logging.StreamHandler",
+                    "formatter": "colored",
+                    "filters": ["uvicorn_access_level"],
                 },
             },
             "root": {
@@ -69,7 +104,7 @@ def setup_logging(level: str = "INFO") -> None:
                     "propagate": False,
                 },
                 "uvicorn.access": {
-                    "handlers": ["console"],
+                    "handlers": ["uvicorn_access_console"],
                     "level": level,
                     "propagate": False,
                 },

@@ -24,6 +24,7 @@ class Settings:
         config: Configuration values loaded from `config.yaml`
         secrets: Secrets and Credentials loaded from `backend/.env`
     """
+
     config: Config
     secrets: Secrets
 

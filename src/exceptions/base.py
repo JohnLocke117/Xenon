@@ -35,7 +35,7 @@ class AppException(Exception):
         self,
         detail: str = "An unexpected error occurred",
         type_uri: str | None = None,
-        extensions: dict[str, Any] | None = None
+        extensions: dict[str, Any] | None = None,
     ) -> None:
         """
         Initialise an application exception
@@ -46,30 +46,30 @@ class AppException(Exception):
             extensions: Optional RFC extension members merged into the response
         """
 
-        super.__init__(detail)
+        super().__init__(detail)
         self.detail = detail
 
         if type_uri:
             self.type_uri = type_uri
         self.extensions = extensions or {}
-    
+
     def to_problem(self, instance: str | None = None) -> ProblemDetail:
         """
         Build a validated RFC 9457 Problem Detail Payload
 
         Args:
             instance: URI identifying this occurrence (typically the request URL)
-        
+
         Returns:
             ProblemDetail: A validated ProblemDetail model ready for JSON serialisation
         """
-        
+
         base = {
             "type": self.type_uri,
             "title": self.title,
             "status": self.status_code,
             "detail": self.detail,
-            "instance": instance
+            "instance": instance,
         }
 
         return ProblemDetail(**base, **self.extensions)

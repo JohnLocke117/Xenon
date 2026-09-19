@@ -17,13 +17,14 @@ from .problem_detail import ProblemDetail
 
 logger = logging.getLogger(__name__)
 
+
 def problem_response(problem: ProblemDetail) -> JSONResponse:
     """
     Converts the defined Problem Detail model to JSON
 
     Args:
         problem: A validated Problem Detail object
-    
+
     Returns:
         JSONResponse with matching status code and `Content-Type: application/problem+json`
     """
@@ -31,8 +32,9 @@ def problem_response(problem: ProblemDetail) -> JSONResponse:
     return JSONResponse(
         status_code=problem.status,
         content=problem.model_dump(),
-        media_type="application/problem+json"
+        media_type="application/problem+json",
     )
+
 
 async def app_exception_handler(request: Request, exc: AppException) -> JSONResponse:
     """
@@ -53,7 +55,7 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
         logger.exception("AppException: %s", exc.detail, exc_info=exc)
     else:
         logger.warning("AppException [%s]: %s", exc.status_code, exc.detail)
-    
+
     return problem_response(exc.to_problem(instance=str(request.url)))
 
 
@@ -62,14 +64,14 @@ async def validation_exception_handler(
 ) -> JSONResponse:
     """
     Handle Pydantic/FastAPI request validation failures.
-    
+
     Returns HTTP 422 with structured validation errors in an extension
     member named ``errors``.
-    
+
     Args:
         request: The incoming HTTP request.
         exc: FastAPI request validation error with Pydantic error details.
-    
+
     Returns:
         RFC 9457 problem detail response with status 422.
     """
@@ -80,26 +82,27 @@ async def validation_exception_handler(
         status=422,
         detail="Request Validation Failed",
         instance=str(request.url),
-        errors=exc.errors()
+        errors=exc.errors(),
     )
 
     return problem_response(problem)
 
+
 async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """
     Catch-all handler for unexpected exceptions.
-    
+
     Logs the full traceback server-side but returns a generic HTTP 500
     problem response so internal implementation details are not leaked.
-    
+
     Args:
         request: The incoming HTTP request.
         exc: The unhandled exception.
-    
+
     Returns:
         Generic RFC 9457 500 problem detail response.
-    """    
-    
+    """
+
     logger.exception("Unhandled Exception", exc_info=exc)
 
     # Never leak internal details to the client
