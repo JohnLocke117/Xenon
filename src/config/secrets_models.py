@@ -22,7 +22,7 @@ class Secrets(BaseSettings):
     DB_PORT: int
     DB_NAME: str
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property  # Allows us to access as .DATABASE_URL (attribute) instead of .DATABASE_URL()
     def DATABASE_URL(self) -> str:
         """

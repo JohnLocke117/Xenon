@@ -5,6 +5,7 @@ Each class maps a domain error to a specific HTTP status and RFC 9457 title.
 Raise these from routes and services instead of FastAPI's HTTPException.
 """
 
+from typing import Any
 from .base import AppException
 
 
@@ -16,7 +17,7 @@ class NotFoundError(AppException):
     status_code = 404
     title = "Resource Not Found"
 
-    def __init__(self, detail: str = "Resource Not Found", **kwargs) -> None:
+    def __init__(self, detail: str = "Resource Not Found", **kwargs: Any) -> None:
         """
         Initialise a not-found error
 
