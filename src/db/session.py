@@ -3,8 +3,10 @@ Define PostgreSQL engine and request-scoped Sessions.
 The Database URL is read from settings.secrets.DATABASE_URL
 """
 
+from collections.abc import Generator
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from src.config.settings import settings
 
@@ -17,12 +19,13 @@ engine = create_engine(url=DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def get_db():
+def get_db() -> Generator[Session, None, None]:
     """
     Provide a request-scoped database session
 
     Yields:
-        A SQLAlchemy `Session` bound to the application engine, closed when the caller finishes
+        A SQLAlchemy `Session` bound to the application engine, 
+        closed when the caller finishes
     """
     db = SessionLocal()
     try:
