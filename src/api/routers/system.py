@@ -1,26 +1,61 @@
 """
-Defines health and system startup endpoints
+System health and readiness HTTP Endpoints
+
+Endpoints Included:
+    - /health: Health Check
+    - /readiness: Services Readiness Check
 """
 
-import logging
+import asyncio
+from fastapi import APIRouter, Response, status
 
-from fastapi import APIRouter
+from src.db.health import check_postgres
+from src.api.routers.models.system_model import HealthCheckResponse, CheckResult, ReadinessResponse
 
 router = APIRouter()
-logger = logging.getLogger(__name__)
 
-@router.get("/health")
-async def health():
+# ----- GET /health: Health Check -----
+@router.get("/health", response_model=HealthCheckResponse)
+async def health() -> HealthCheckResponse:
     """
     Default Health Check endpoint
+
+    Returns:
+        HealthCheckResponse with `status` set to `OK`
     """
 
-    return {"message": "Health OK"}
+    return HealthCheckResponse(status="OK")
 
-@router.get("/readiness")
-async def readiness():
+
+# ----- GET /readiness: All Services Readiness Check -----
+CHECKS = [
+    ("postgres", check_postgres)
+]
+
+@router.get("/readiness", response_model=ReadinessResponse)
+async def readiness(response: Response) -> ReadinessResponse:
     """
-    Readiness Check for all Services and Infrastructure
+    Readiness Endpoint, returns current status of all Services
+
+    Each check is run in a worker thread. Sets HTTP 200 when every
+    check is `up`, otherwise HTTP 503.
+
+    Returns:
+        ReadinessResponse with overall `status` and per-service
+        `checks`
     """
 
-    return {"backend": "FastAPI Backend is OK"}
+    checks: dict[str, CheckResult] = {}
+    
+    for name, fn in CHECKS:
+        result = await asyncio.to_thread(fn)
+        checks[name] = CheckResult(**result)
+    
+    all_up = all(c.status == "up" for c in checks.values())
+    response.status_code = status.HTTP_200_OK if all_up else status.HTTP_503_SERVICE_UNAVAILABLE
+
+    return ReadinessResponse(
+        status="ready" if all_up else "not_ready",
+        checks=checks
+    )
+

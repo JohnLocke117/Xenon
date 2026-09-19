@@ -46,7 +46,7 @@ class AppException(Exception):
             extensions: Optional RFC extension members merged into the response
         """
 
-        super.__init__(detail)
+        super().__init__(detail)
         self.detail = detail
 
         if type_uri:
