@@ -36,7 +36,7 @@ def problem_response(problem: ProblemDetail) -> JSONResponse:
     )
 
 
-async def app_exception_handler(request: Request, exc: AppException) -> JSONResponse:
+async def app_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """
     Handle AppException and all subclasses (e.g. NotFoundError)
 
@@ -45,11 +45,14 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
 
     Args:
         request: The incoming HTTP request (used for the instance field)
-        exc: The raised application exception
+        exc: The raised exception (expected to be an ``AppException``).
 
     Returns:
         RFC 9457 problem detail response
     """
+
+    if not isinstance(exc, AppException):
+        raise exc
 
     if exc.status_code >= 500:
         logger.exception("AppException: %s", exc.detail, exc_info=exc)
@@ -59,9 +62,7 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
     return problem_response(exc.to_problem(instance=str(request.url)))
 
 
-async def validation_exception_handler(
-    request: Request, exc: RequestValidationError
-) -> JSONResponse:
+async def validation_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """
     Handle Pydantic/FastAPI request validation failures.
 
@@ -70,11 +71,14 @@ async def validation_exception_handler(
 
     Args:
         request: The incoming HTTP request.
-        exc: FastAPI request validation error with Pydantic error details.
+        exc: The raised exception (expected to be ``RequestValidationError``).
 
     Returns:
         RFC 9457 problem detail response with status 422.
     """
+
+    if not isinstance(exc, RequestValidationError):
+        raise exc
 
     problem = ProblemDetail(
         type="about:blank",
