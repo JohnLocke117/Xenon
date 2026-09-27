@@ -19,7 +19,7 @@ engine = create_engine(url=DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def get_db() -> Generator[Session, None, None]:
+def get_db() -> Generator[Session]:
     """
     Provide a request-scoped database session
 

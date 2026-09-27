@@ -6,6 +6,7 @@ Raise these from routes and services instead of FastAPI's HTTPException.
 """
 
 from typing import Any
+
 from .base import AppException
 
 
