@@ -16,7 +16,7 @@ class UvicornAccessLogFilter(logging.Filter):
 
         if not isinstance(args, tuple) or len(args) < 5:
             return True
-        
+
         status_code = args[4]
         if not isinstance(status_code, int):
             return True

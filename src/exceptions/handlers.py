@@ -62,9 +62,7 @@ async def app_exception_handler(request: Request, exc: Exception) -> JSONRespons
     return problem_response(exc.to_problem(instance=str(request.url)))
 
 
-async def validation_exception_handler(
-    request: Request, exc: Exception
-) -> JSONResponse:
+async def validation_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """
     Handle Pydantic/FastAPI request validation failures.
 

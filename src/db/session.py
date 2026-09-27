@@ -24,7 +24,7 @@ def get_db() -> Generator[Session]:
     Provide a request-scoped database session
 
     Yields:
-        A SQLAlchemy `Session` bound to the application engine, 
+        A SQLAlchemy `Session` bound to the application engine,
         closed when the caller finishes
     """
     db = SessionLocal()
