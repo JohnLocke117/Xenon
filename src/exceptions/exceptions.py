@@ -28,3 +28,15 @@ class NotFoundError(AppException):
         """
 
         super().__init__(detail, **kwargs)
+
+
+class ConflictError(AppException):
+    """
+    409 Conflict Error for alraedy existing resource
+    """
+
+    status_code = 409
+    title = "Resource Conflict"
+
+    def __init__(self, detail: str = "Resource Conflict", **kwargs: Any) -> None:
+        super().__init__(detail, **kwargs)
