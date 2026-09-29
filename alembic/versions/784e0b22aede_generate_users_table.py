@@ -24,7 +24,7 @@ def upgrade() -> None:
     op.create_table('users',
     sa.Column('user_id', sa.String(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
-    sa.Column('password', sa.String(), nullable=False),
+    sa.Column('password_hash', sa.String(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('role', sa.Enum('BASIC', 'ADMIN', name='user_role'), server_default='basic', nullable=False),
     sa.PrimaryKeyConstraint('user_id'),
