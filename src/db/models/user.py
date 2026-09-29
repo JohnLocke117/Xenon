@@ -4,7 +4,8 @@ SQLAlchemy ORM models for application users
 
 import enum
 
-from sqlalchemy import Column, Enum, String
+from sqlalchemy import Enum, String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.db.base import Base
 from src.db.generate_uuid import new_uuid
@@ -33,13 +34,16 @@ class User(Base):
 
     __tablename__ = "users"
 
-    user_id = Column(String, primary_key=True, nullable=False, default=lambda: new_uuid("user"))
-    email = Column(String, nullable=False, unique=True)
-    password_hash = Column(String, nullable=False)
-    name = Column(String, nullable=False)
-    role = Column(
+    # NOTE: We're not passing nullable=False in these columns as
+    # mapped_column is nullable=False when we provide a proper type,
+    # Mapped[str], rather than Mapped[str | None]
+
+    user_id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: new_uuid("user"))
+    email: Mapped[str] = mapped_column(String, unique=True)
+    password_hash: Mapped[str] = mapped_column(String)
+    name: Mapped[str] = mapped_column(String)
+    role: Mapped[str] = mapped_column(
         Enum(UserRole, name="user_role"),
-        nullable=False,
         default=UserRole.BASIC,
         server_default="basic",
     )
