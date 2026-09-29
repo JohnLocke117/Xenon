@@ -9,7 +9,6 @@ from fastapi.exceptions import RequestValidationError
 
 from src.api.routers.system import router as system_router
 from src.api.routers.users import router as user_router
-
 from src.exceptions.base import AppException
 from src.exceptions.handlers import (
     app_exception_handler,

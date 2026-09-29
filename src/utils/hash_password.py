@@ -13,7 +13,7 @@ def hash_password(password: str) -> str:
 
     Attributes:
         - password: A plain text password recived via /signup endpoint
-    
+
     Returns:
         A hashed password that is stored into the DB as password_hash
     """

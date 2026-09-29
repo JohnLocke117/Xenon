@@ -14,6 +14,7 @@ class UserRole(enum.Enum):
     """
     Class to define allowed User Roles
     """
+
     BASIC = "basic"
     ADMIN = "admin"
 
@@ -40,5 +41,5 @@ class User(Base):
         Enum(UserRole, name="user_role"),
         nullable=False,
         default=UserRole.BASIC,
-        server_default="basic"
+        server_default="basic",
     )

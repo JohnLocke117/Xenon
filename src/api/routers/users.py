@@ -6,9 +6,9 @@ Contains:
 
 from fastapi import APIRouter, status
 
-from src.services.user_service import create_user
 from src.api.deps import DbSession
 from src.api.routers.models.user_model import SignupRequest, UserResponse
+from src.services.user_service import create_user
 
 router = APIRouter()
 
@@ -20,7 +20,7 @@ def signup(body: SignupRequest, db: DbSession) -> UserResponse:
 
     Returns:
         The created user without the password hash
-    
+
     Raises:
         ConflictError: This email is already registered
     """
