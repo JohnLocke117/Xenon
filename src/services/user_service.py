@@ -38,7 +38,7 @@ def create_user(db: Session, email: str, password: str, name: str) -> User:
     # NOTE: user_id is omitted as it is created by column default for each user
     user = User(
         email=email.strip().lower(),
-        password=hash_password(password),
+        password_hash=hash_password(password),
         name=name,
         role=UserRole.BASIC,
     )

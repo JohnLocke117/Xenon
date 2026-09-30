@@ -43,7 +43,7 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String)
     name: Mapped[str] = mapped_column(String)
     role: Mapped[str] = mapped_column(
-        Enum(UserRole, name="user_role"),
+        Enum(UserRole, name="user_role", values_callable=lambda roles: [role.value for role in roles]),
         default=UserRole.BASIC,
         server_default="basic",
     )
