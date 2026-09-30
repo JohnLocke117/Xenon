@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 
 from src.api.routers.system import router as system_router
+from src.api.routers.users import router as user_router
 from src.exceptions.base import AppException
 from src.exceptions.handlers import (
     app_exception_handler,
@@ -26,5 +27,6 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, unhandled_exception_handler)
 
 
-# Add the Router Instance
+# Add the Router Instances
 app.include_router(system_router, prefix="/api/v1")
+app.include_router(user_router, prefix="/api/v1")

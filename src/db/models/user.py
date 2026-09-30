@@ -2,9 +2,22 @@
 SQLAlchemy ORM models for application users
 """
 
-from sqlalchemy import Column, Integer, String
+import enum
+
+from sqlalchemy import Enum, String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.db.base import Base
+from src.db.generate_uuid import new_uuid
+
+
+class UserRole(enum.Enum):
+    """
+    Class to define allowed User Roles
+    """
+
+    BASIC = "basic"
+    ADMIN = "admin"
 
 
 class User(Base):
@@ -13,10 +26,24 @@ class User(Base):
 
     Attributes:
         user_id: A unique user ID. Used as primary key
-        name: User display name
+        email: User Email, unique and non-nullable
+        password_hash: Hashed User Password
+        name: User display name,
+        role: User Role. Defaults to basic
     """
 
     __tablename__ = "users"
 
-    user_id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
+    # NOTE: We're not passing nullable=False in these columns as
+    # mapped_column is nullable=False when we provide a proper type,
+    # Mapped[str], rather than Mapped[str | None]
+
+    user_id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: new_uuid("user"))
+    email: Mapped[str] = mapped_column(String, unique=True)
+    password_hash: Mapped[str] = mapped_column(String)
+    name: Mapped[str] = mapped_column(String)
+    role: Mapped[str] = mapped_column(
+        Enum(UserRole, name="user_role", values_callable=lambda roles: [r.value for r in roles]),
+        default=UserRole.BASIC,
+        server_default="basic",
+    )
