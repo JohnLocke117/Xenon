@@ -39,11 +39,7 @@ def create_user(db: Session, email: str, password: str, name: str) -> User:
     # Set role to admin if email is present in ADMIN_EMAILS
     normalised_email = email.strip().lower()
 
-    role = (
-        UserRole.ADMIN
-        if normalised_email in settings.secrets.admin_emails
-        else UserRole.BASIC
-    )
+    role = UserRole.ADMIN if normalised_email in settings.secrets.admin_emails else UserRole.BASIC
 
     # NOTE: user_id is omitted as it is created by column default for each user
     user = User(
