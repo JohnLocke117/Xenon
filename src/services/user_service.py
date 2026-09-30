@@ -12,6 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from src.config.settings import settings
 from src.db.models.user import User, UserRole
 from src.exceptions import NotFoundError
 from src.exceptions.exceptions import ConflictError
@@ -20,7 +21,7 @@ from src.utils.hash_password import hash_password
 
 def create_user(db: Session, email: str, password: str, name: str) -> User:
     """
-    Insert a basic user.
+    Insert a basic/admin user.
 
     Args:
         db: Request-scoped DB Session. The caller commits
@@ -35,12 +36,17 @@ def create_user(db: Session, email: str, password: str, name: str) -> User:
         ConflictError: If a user with this email already exists
     """
 
+    # Set role to admin if email is present in ADMIN_EMAILS
+    normalised_email = email.strip().lower()
+
+    role = UserRole.ADMIN if normalised_email in settings.secrets.admin_emails else UserRole.BASIC
+
     # NOTE: user_id is omitted as it is created by column default for each user
     user = User(
         email=email.strip().lower(),
-        password=hash_password(password),
+        password_hash=hash_password(password),
         name=name,
-        role=UserRole.BASIC,
+        role=role,
     )
 
     db.add(user)

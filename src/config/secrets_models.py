@@ -16,6 +16,7 @@ class Secrets(BaseSettings):
     Defines the secrets loaded from backend/.env
     """
 
+    ADMIN_EMAILS: str = ""
     DB_USER: str
     DB_PASSWORD: str
     DB_HOST: str
@@ -29,3 +30,9 @@ class Secrets(BaseSettings):
         Build a PostgreSQL connection URL from the DB_* fields
         """
         return f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def admin_emails(self) -> set[str]:
+        """Lowercased admin addresses from ADMIN_EMAILS"""
+        return {email.strip().lower() for email in self.ADMIN_EMAILS.split(",") if email.strip()}
