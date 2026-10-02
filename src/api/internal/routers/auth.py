@@ -16,7 +16,12 @@ from src.services.user_service import create_user
 router = APIRouter()
 
 
-@router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/signup",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    include_in_schema=False
+)
 def signup(body: SignupRequest, db: DbSession) -> UserResponse:
     """
     Create a basic user
