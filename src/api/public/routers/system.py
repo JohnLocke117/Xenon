@@ -10,7 +10,7 @@ import asyncio
 
 from fastapi import APIRouter, Response, status
 
-from src.api.routers.models.system_model import CheckResult, HealthCheckResponse, ReadinessResponse
+from src.api.models.system_model import CheckResult, HealthCheckResponse, ReadinessResponse
 from src.db.health import check_postgres
 
 router = APIRouter()
