@@ -10,6 +10,21 @@ from typing import Any
 from .base import AppException
 
 
+class UnauthorizedError(AppException):
+    """
+    401 Unauthorized Exception
+    """
+
+    status_code = 401
+    title = "Unauthorized"
+
+    def __ini__(self, detail: str = "Unauthorized", **kwargs: Any) -> None:
+        """
+        Initialise a 401 Unauthorized error
+        """
+        super().__init__(detail, **kwargs)
+
+
 class NotFoundError(AppException):
     """
     404 Not Found Exception

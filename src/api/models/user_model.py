@@ -7,13 +7,13 @@ from pydantic import BaseModel, ConfigDict
 from src.db.models.user import UserRole
 
 
-class SignupRequest(BaseModel):
+class ProvisionRequest(BaseModel):
     """
-    Body for POST /api/v1/users
+    Body for POST /auth/provision
     """
 
+    keycloak_subject: str
     email: str
-    password: str
     name: str
 
 

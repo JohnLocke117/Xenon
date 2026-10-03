@@ -27,9 +27,9 @@ class User(Base):
     Attributes:
         user_id: A unique user ID. Used as primary key
         email: User Email, unique and non-nullable
-        password_hash: Hashed User Password
         name: User display name,
         role: User Role. Defaults to basic
+        keycloak_subject: The keycloak subject, unique identifier for a Keycloak User
     """
 
     __tablename__ = "users"
@@ -40,10 +40,10 @@ class User(Base):
 
     user_id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: new_uuid("user"))
     email: Mapped[str] = mapped_column(String, unique=True)
-    password_hash: Mapped[str] = mapped_column(String)
     name: Mapped[str] = mapped_column(String)
     role: Mapped[str] = mapped_column(
         Enum(UserRole, name="user_role", values_callable=lambda roles: [r.value for r in roles]),
         default=UserRole.BASIC,
         server_default="basic",
     )
+    keycloak_subject: Mapped[str] = mapped_column(String, unique=True, nullable=False)
