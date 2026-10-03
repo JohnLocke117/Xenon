@@ -8,10 +8,9 @@ export default function LoginPage() {
     const [message, setMessage] = useState("")
 
     function handleSumbit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault()
+        event.preventDefault();
+        setMessage("Login is Placeholder right now");
     }
-
-    setMessage("Login is Placeholder right now");
 
     return (
         <main>
@@ -28,7 +27,9 @@ export default function LoginPage() {
                     required
                 />
 
-                <label htmlFor="password"></label>
+                <br />
+
+                <label htmlFor="password">Password</label>
                 <input 
                     id="password"
                     name="password"
@@ -36,6 +37,8 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     required
                 />
+
+                <br />
 
                 <button type="submit">Log In</button>
             </form>
