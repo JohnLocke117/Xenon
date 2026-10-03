@@ -1,0 +1,30 @@
+import { redirect } from "next/navigation";
+import { auth, signOut } from "@/auth";
+
+export default async function DashboardPage() {
+    const session = await auth();
+
+    if (!session?.user) {
+        redirect("/login");
+    }
+
+    const name = session.user.xenon?.name ?? session.user.name ?? "there";
+
+    return (
+        <main>
+            <h1>Hello {name}!</h1>
+            <p>Welcome to your Xenon Dashboard.</p>
+
+            <p>Role: {session.user.xenon?.role ?? "unknown"}</p>
+
+            <form
+                action={async () => {
+                    "use server";
+                    await signOut({ redirectTo: "/" });
+                }}
+            >
+                <button type="submit">Log Out</button>
+            </form>
+        </main>
+    );
+}
