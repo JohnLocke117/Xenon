@@ -34,16 +34,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 if (!profile?.sub || !profile.email) {
                     throw new Error("Keycloak profile is missing required identity claims");
                 }
-
-                const profileName =
-                    profile.name?.trim() ||
-                    [profile.given_name, profile.family_name].filter(Boolean).join(" ").trim() ||
-                    profile.email;
                 
                 const xenonUser = await provisionUser({
                     keycloak_subject: profile.sub,
                     email: profile.email,
-                    name: profileName,
+                    name: profile.name?.trim() || profile.email,
                 });
 
                 token.xenonUser = xenonUser;
