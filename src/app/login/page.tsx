@@ -11,7 +11,7 @@ export default function LoginPage() {
                 action={async () => {
                     "use server";
                     await signIn("keycloak", {
-                        redirectTo: "/dashboard"
+                        redirectTo: "/dashboard",
                     });
                 }}
             >

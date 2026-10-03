@@ -10,15 +10,15 @@ const keycloakRegistrationProvider = Keycloak({
     authorization: {
         params: {
             prompt: "create",
-        }
-    }
+        },
+    },
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     providers: [keycloakProvider, keycloakRegistrationProvider],
 
     session: {
-        strategy: "jwt"
+        strategy: "jwt",
     },
 
     callbacks: {
@@ -33,9 +33,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 account?.provider === "keycloak-registration"
             ) {
                 if (!profile?.sub || !profile.email) {
-                    throw new Error("Keycloak profile is missing required identity claims");
+                    throw new Error(
+                        "Keycloak profile is missing required identity claims"
+                    );
                 }
-                
+
                 const xenonUser = await provisionUser({
                     keycloak_subject: profile.sub,
                     email: profile.email,
@@ -54,6 +56,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
 
             return session;
-        }
-    }
+        },
+    },
 });

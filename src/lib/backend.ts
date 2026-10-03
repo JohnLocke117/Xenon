@@ -23,10 +23,10 @@ export async function provisionUser(identity: {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-BFF-Service-Token": bffServiceToken
+            "X-BFF-Service-Token": bffServiceToken,
         },
         body: JSON.stringify(identity),
-        cache: "no-store"
+        cache: "no-store",
     });
 
     if (!response.ok) {
