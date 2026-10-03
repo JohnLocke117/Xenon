@@ -22,6 +22,7 @@ class Secrets(BaseSettings):
     DB_HOST: str
     DB_PORT: int
     DB_NAME: str
+    BFF_SERVICE_TOKEN: str
 
     @computed_field  # type: ignore[prop-decorator]
     @property  # Allows us to access as .DATABASE_URL (attribute) instead of .DATABASE_URL()
