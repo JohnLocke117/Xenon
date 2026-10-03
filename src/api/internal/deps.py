@@ -8,8 +8,9 @@ from typing import Annotated
 
 from fastapi import Header
 
-from src.exceptions.exceptions import UnauthorizedError
 from src.api.deps import SettingsDep
+from src.exceptions.exceptions import UnauthorizedError
+
 
 def require_bff_service(
     settings: SettingsDep,

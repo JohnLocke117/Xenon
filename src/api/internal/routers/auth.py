@@ -9,8 +9,8 @@ Contains:
 
 from fastapi import APIRouter, Depends, status
 
-from src.api.internal.deps import require_bff_service
 from src.api.deps import DbSession
+from src.api.internal.deps import require_bff_service
 from src.api.models.user_model import ProvisionRequest, UserResponse
 from src.services.user_service import create_user, get_user
 
