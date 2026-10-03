@@ -7,13 +7,14 @@ Contains:
     - User Provision: POST /provision
 """
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Depends, status
 
+from src.api.internal.deps import require_bff_service
 from src.api.deps import DbSession
 from src.api.models.user_model import ProvisionRequest, UserResponse
 from src.services.user_service import create_user, get_user
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_bff_service)])
 
 
 @router.post(
