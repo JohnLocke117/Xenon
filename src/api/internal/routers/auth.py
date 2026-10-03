@@ -21,7 +21,7 @@ router = APIRouter(dependencies=[Depends(require_bff_service)])
     "/provision",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
-    include_in_schema=False
+    include_in_schema=False,
 )
 def provision(body: ProvisionRequest, db: DbSession) -> UserResponse:
     """
@@ -40,10 +40,7 @@ def provision(body: ProvisionRequest, db: DbSession) -> UserResponse:
     # If User does not exist, create it:
     if user is None:
         user = create_user(
-            db,
-            keycloak_subject=body.keycloak_subject,
-            email=body.email,
-            name=body.name
+            db, keycloak_subject=body.keycloak_subject, email=body.email, name=body.name
         )
 
     db.commit()

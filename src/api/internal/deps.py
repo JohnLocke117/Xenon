@@ -14,7 +14,7 @@ from src.exceptions.exceptions import UnauthorizedError
 
 def require_bff_service(
     settings: SettingsDep,
-    supplied_token: Annotated[str | None, Header(alias="X-BFF-Service-Token")] = None
+    supplied_token: Annotated[str | None, Header(alias="X-BFF-Service-Token")] = None,
 ) -> None:
     """
     Allow requests carrying the configured BFF Service Token
@@ -23,7 +23,7 @@ def require_bff_service(
     user identity fields in the request body came from Keycloak; the BFF
     must validate the Keycloak identity before calling this endpoint.
     """
-    
+
     expected_token = settings.secrets.BFF_SERVICE_TOKEN
 
     if supplied_token is None or not secrets.compare_digest(supplied_token, expected_token):
