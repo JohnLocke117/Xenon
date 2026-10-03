@@ -1,32 +1,26 @@
-"use client"
+import { redirect } from "next/navigation";
+import { auth, signOut } from "@/auth";
 
-import Link from "next/link"
-import { useState } from "react"
+export default async function DashboardPage() {
+    const session = await auth();
 
-export default function DashboardPage() {
-    const [loggedOut, setLoggedOut] = useState(false);
-
-    function handleLogout() {
-        setLoggedOut(true);
+    if (!session?.user) {
+        redirect("/login");
     }
-
-    if (loggedOut) {
-        return (
-            <main>
-                <p>You have logged out</p>
-                <Link href="/">Back to Home</Link>
-            </main>
-        );
-    }
-
-    const name = "Lorem Ipsum"
 
     return (
         <main>
-            <h1>Hello {name}!</h1>
-            <p>Welcome to Xenon Dashboard</p>
+            <h1>Hello {session.user.name ?? session.user.email ?? "there"}!</h1>
+            <p>Welcome to your Xenon Dashboard.</p>
 
-            <button type="button" onClick={handleLogout}>Log Out</button>
+            <form
+                action={async () => {
+                    "use server";
+                    await signOut({  redirectTo: "/"});
+                }}
+            >
+                <button type="submit">Log Out</button>
+            </form>
         </main>
-    );
+    )
 }
