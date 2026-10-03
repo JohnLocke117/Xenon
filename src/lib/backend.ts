@@ -1,3 +1,5 @@
+import "server-only";
+
 function requiredEnv(name: string): string {
     const value = process.env[name];
 
@@ -11,15 +13,18 @@ function requiredEnv(name: string): string {
 const backendUrl = requiredEnv("BACKEND_INTERNAL_URL");
 const bffServiceToken = requiredEnv("BFF_SERVICE_TOKEN");
 
-if (!backendUrl || !bffServiceToken) {
-    throw new Error("Missing backend BFF Configuration");
+export type XenonUser = {
+    user_id: string;
+    email: string;
+    name: string;
+    role: "basic" | "admin";
 }
 
 export async function provisionUser(identity: {
     keycloak_subject: string;
     email: string;
     name: string;
-}) {
+}): Promise<XenonUser> {
     const response = await fetch(`${backendUrl}/auth/provision`, {
         method: "POST",
         headers: {
@@ -34,10 +39,5 @@ export async function provisionUser(identity: {
         throw new Error(`User provisioning failed (${response.status})`);
     }
 
-    return response.json() as Promise<{
-        user_id: string;
-        email: string;
-        name: string;
-        role: "basic" | "admin";
-    }>;
+    return (await response.json()) as XenonUser;
 }

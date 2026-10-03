@@ -8,10 +8,14 @@ export default async function DashboardPage() {
         redirect("/login");
     }
 
+    const name = session.user.xenon?.name ?? session.user.name ?? "there";
+
     return (
         <main>
-            <h1>Hello {session.user.name ?? session.user.email ?? "there"}!</h1>
+            <h1>Hello {name}!</h1>
             <p>Welcome to your Xenon Dashboard.</p>
+
+            <p>Role: {session.user.xenon?.role ?? "unknown"}</p>
 
             <form
                 action={async () => {
@@ -22,5 +26,5 @@ export default async function DashboardPage() {
                 <button type="submit">Log Out</button>
             </form>
         </main>
-    )
+    );
 }

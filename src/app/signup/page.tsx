@@ -10,9 +10,8 @@ export default function SignupPage() {
             <form
                 action={async () => {
                     "use server";
-                    await signIn("keycloak", {
-                        redirectTo: "/dashboard",
-                        prompt: "create",
+                    await signIn("keycloak-registration", {
+                        redirectTo: "/dashboard"
                     });
                 }}
             >
