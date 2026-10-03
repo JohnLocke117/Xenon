@@ -1,11 +1,11 @@
-import "./globals.css";
+import "./globals.css"
 
-export default function RootLayout({ }: LayoutProps<"/">) {
-	return (
-		<html lang="en">
-			<body>
-				<h1>Hi</h1>
-			</body>
-		</html>
-	);
+import type { ReactNode } from "react";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
 }
