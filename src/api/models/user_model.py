@@ -11,6 +11,7 @@ class ProvisionRequest(BaseModel):
     """
     Body for POST /auth/provision
     """
+
     keycloak_subject: str
     email: str
     name: str

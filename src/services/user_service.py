@@ -27,10 +27,10 @@ def get_user(db: Session, *, keycloak_subject: str) -> User | None:
     """
 
     subject = keycloak_subject.strip()
-    
+
     if not subject:
         raise ValueError("Keycloak Subject cannot be empty")
-    
+
     # Get the User
     user = db.scalar(select(User).where(User.keycloak_subject == subject))
 
@@ -47,10 +47,10 @@ def create_user(db: Session, *, keycloak_subject: str, email: str, name: str) ->
         keycloak_subject: Stable sub claim from a validated Keycloak Identity
         email: Email from the validated Keycloak Identity
         name: Display name from the validated Keycloak Identity
-    
+
     Returns:
         The flushed User, including its generated User UUIDv7
-    
+
     Raises:
         ValueError: If a required identity field is empty
         ConflictError: If the email or Keycloak subject is already in use
@@ -66,20 +66,11 @@ def create_user(db: Session, *, keycloak_subject: str, email: str, name: str) ->
         raise ValueError("Email cannot be empty")
     if not normalised_name:
         raise ValueError("Name cannot be empty")
-    
-    # Define the User Role
-    role = (
-        UserRole.ADMIN
-        if normalised_email in settings.secrets.admin_emails
-        else UserRole.BASIC
-    )
 
-    user = User(
-        keycloak_subject=subject,
-        email=normalised_email,
-        name=normalised_name,
-        role=role
-    )
+    # Define the User Role
+    role = UserRole.ADMIN if normalised_email in settings.secrets.admin_emails else UserRole.BASIC
+
+    user = User(keycloak_subject=subject, email=normalised_email, name=normalised_name, role=role)
 
     db.add(user)
 
@@ -88,5 +79,5 @@ def create_user(db: Session, *, keycloak_subject: str, email: str, name: str) ->
     except IntegrityError:
         db.rollback()
         raise ConflictError("The Email or Keycloak Identity is already linked to a User") from None
-    
+
     return user
