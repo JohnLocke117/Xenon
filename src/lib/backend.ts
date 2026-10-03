@@ -1,4 +1,5 @@
 import "server-only";
+import type { XenonUser } from "@/types/xenon";
 
 function requiredEnv(name: string): string {
     const value = process.env[name];
@@ -12,13 +13,6 @@ function requiredEnv(name: string): string {
 
 const backendUrl = requiredEnv("BACKEND_INTERNAL_URL");
 const bffServiceToken = requiredEnv("BFF_SERVICE_TOKEN");
-
-export type XenonUser = {
-    user_id: string;
-    email: string;
-    name: string;
-    role: "basic" | "admin";
-}
 
 export async function provisionUser(identity: {
     keycloak_subject: string;

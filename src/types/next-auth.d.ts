@@ -1,11 +1,5 @@
 import type { DefaultSession } from "next-auth";
-
-type XenonUser = {
-    user_id: string;
-    email: string;
-    name: string;
-    role: "basic" | "admin";
-};
+import { XenonUser } from "./xenon";
 
 declare module "next-auth" {
     interface Session {

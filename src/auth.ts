@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Keycloak from "next-auth/providers/keycloak";
 import { provisionUser } from "./lib/backend";
+import { XenonUser } from "./types/xenon";
 
 const keycloakProvider = Keycloak;
 
@@ -49,7 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         async session({ session, token }) {
             if (session.user && token.xenonUser) {
-                session.user.xenon = token.xenonUser;
+                session.user.xenon = token.xenonUser as XenonUser;
             }
 
             return session;
