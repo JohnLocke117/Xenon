@@ -1,0 +1,9 @@
+# Secrets
+.env*
+
+# Cache and Temporary Files
+__pycache__
+.venv
+.mypy_cache
+.ruff_cache
+.DS_Store
