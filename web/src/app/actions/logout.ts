@@ -20,12 +20,10 @@ export async function logout(): Promise<void> {
     const token = await getToken({
         req: { headers: new Headers(await headers()) },
         secret: requiredEnv("AUTH_SECRET"),
-        secureCookie: appUrl.protocol === "https:"
+        secureCookie: appUrl.protocol === "https:",
     });
 
-    const logoutUrl = new URL(
-        `${issuer}/protocol/openid-connect/logout`
-    );
+    const logoutUrl = new URL(`${issuer}/protocol/openid-connect/logout`);
 
     logoutUrl.searchParams.set("client_id", clientId);
     logoutUrl.searchParams.set(
