@@ -1,0 +1,61 @@
+services:
+    web:
+        build:
+            context: ../web
+        environment:
+            AUTH_SECRET: ${AUTH_SECRET}
+            AUTH_URL: ${AUTH_URL}
+            AUTH_KEYCLOAK_ID: ${AUTH_KEYCLOAK_ID}
+            AUTH_KEYCLOAK_SECRET: ${AUTH_KEYCLOAK_SECRET}
+            AUTH_KEYCLOAK_ISSUER: ${AUTH_KEYCLOAK_ISSUER}
+            BACKEND_INTERNAL_URL: ${BACKEND_INTERNAL_URL}
+            BFF_SERVICE_TOKEN: ${BFF_SERVICE_TOKEN}
+        ports:
+            - "3000:3000"
+        depends_on:
+            - backend
+            - keycloak
+
+    backend:
+        build:
+            context: ../backend
+        env_file:
+            - ../backend/.env
+        environment:
+            DB_HOST: db
+        depends_on:
+            - db
+        ports:
+            - "8080:8080"
+
+    db:
+        image: postgres:17
+        container_name: postgres_db
+        environment:
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./infra/postgres/init-keycloak.sql:/docker-entrypoint-initdb.d/01-init-keycloak.sql:ro
+    
+    keycloak:
+        image: quay.io/keycloak/keycloak:26.8.0
+        command: start-dev
+        environment:
+            KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+            KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+            KC_DB: ${KC_DB}
+            KC_DB_URL_HOST: ${KC_DB_URL_HOST}
+            KC_DB_URL_DATABASE: ${KC_DB_URL_DATABASE}
+            KC_DB_USERNAME: ${KC_DB_USERNAME}
+            KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+        ports:
+            - "127.0.0.1:8081:8080"
+        depends_on:
+            - db
+
+volumes:
+    postgres_data:
