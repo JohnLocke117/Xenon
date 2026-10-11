@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import { logout } from "@/app/actions/logout";
 
 export default async function DashboardPage() {
     const session = await auth();
@@ -17,12 +18,7 @@ export default async function DashboardPage() {
 
             <p>Role: {session.user.xenon?.role ?? "unknown"}</p>
 
-            <form
-                action={async () => {
-                    "use server";
-                    await signOut({ redirectTo: "/" });
-                }}
-            >
+            <form action={logout}>
                 <button type="submit">Log Out</button>
             </form>
         </main>

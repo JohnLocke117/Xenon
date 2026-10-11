@@ -11,14 +11,14 @@ function requiredEnv(name: string): string {
     return value;
 }
 
-const backendUrl = requiredEnv("BACKEND_INTERNAL_URL");
-const bffServiceToken = requiredEnv("BFF_SERVICE_TOKEN");
-
 export async function provisionUser(identity: {
     keycloak_subject: string;
     email: string;
     name: string;
 }): Promise<XenonUser> {
+    const backendUrl = requiredEnv("BACKEND_INTERNAL_URL");
+    const bffServiceToken = requiredEnv("BFF_SERVICE_TOKEN");
+
     const response = await fetch(`${backendUrl}/auth/provision`, {
         method: "POST",
         headers: {
