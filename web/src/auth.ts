@@ -38,13 +38,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     );
                 }
 
-                const xenonUser = await provisionUser({
+                token.xenonUser = await provisionUser({
                     keycloak_subject: profile.sub,
                     email: profile.email,
                     name: profile.name?.trim() || profile.email,
                 });
 
-                token.xenonUser = xenonUser;
+                token.idToken = account.id_token;
             }
 
             return token;
