@@ -41,7 +41,8 @@ async def app_exception_handler(request: Request, exc: Exception) -> JSONRespons
     Handle AppException and all subclasses (e.g. NotFoundError)
 
     Logs server errors (5xx) at exception level and client errors (4xx)
-    at warning level. Never expose internal details beyond `exc.detail`
+    at warning level. Never expose internal details beyond `exc.detail`.
+    Added a Bearer challenge for authentication failures on API routes
 
     Args:
         request: The incoming HTTP request (used for the instance field)
@@ -59,7 +60,12 @@ async def app_exception_handler(request: Request, exc: Exception) -> JSONRespons
     else:
         logger.warning("AppException [%s]: %s", exc.status_code, exc.detail)
 
-    return problem_response(exc.to_problem(instance=str(request.url)))
+    response = problem_response(exc.to_problem(instance=str(request.url)))
+
+    if exc.status_code == 401 and request.url.path.startswith("/api/v1/"):
+        response.headers["WWW-Authenticate"] = "Bearer"
+
+    return response
 
 
 async def validation_exception_handler(request: Request, exc: Exception) -> JSONResponse:

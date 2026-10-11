@@ -18,9 +18,9 @@ class UnauthorizedError(AppException):
     status_code = 401
     title = "Unauthorized"
 
-    def __ini__(self, detail: str = "Unauthorized", **kwargs: Any) -> None:
+    def __init__(self, detail: str = "Unauthorized", **kwargs: Any) -> None:
         """
-        Initialise a 401 Unauthorized error
+        Initialize a 401 Unauthorized error
         """
         super().__init__(detail, **kwargs)
 
@@ -35,7 +35,7 @@ class NotFoundError(AppException):
 
     def __init__(self, detail: str = "Resource Not Found", **kwargs: Any) -> None:
         """
-        Initialise a not-found error
+        Initialize a not-found error
 
         Args:
             detail: Explanation of which resource was not found
@@ -47,11 +47,23 @@ class NotFoundError(AppException):
 
 class ConflictError(AppException):
     """
-    409 Conflict Error for alraedy existing resource
+    409 Conflict Error for already existing resource
     """
 
     status_code = 409
     title = "Resource Conflict"
 
     def __init__(self, detail: str = "Resource Conflict", **kwargs: Any) -> None:
+        super().__init__(detail, **kwargs)
+
+
+class ServiceUnavailableError(AppException):
+    """
+    503 Service Unavailable error when a service is temporarily unavailable
+    """
+
+    status_code = 503
+    title = "Service Unavailable"
+
+    def __init__(self, detail: str = "Service Unavailable", **kwargs: Any) -> None:
         super().__init__(detail, **kwargs)

@@ -5,3 +5,8 @@ app:
 server:
     host: localhost
     port: 8080
+
+auth:
+    issuer: http://localhost:8081/realms/xenon
+    audience: xenon-api
+    jwks_url: http://keycloak:8080/realms/xenon/protocol/openid-connect/certs

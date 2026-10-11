@@ -71,32 +71,34 @@ This document serves as a RoadMap through the lifecycle of this project.
 >
 > *User account management, authentication, and authorisation*
 >
-> Users sign up and log in with an email address and password. The browser talks only to the BFF. Nginx is the only public path to FastAPI and exposes `/api/v1/*` only. The BFF calls `/auth/*` over a trusted internal connection. FastAPI turns every accepted credential into one Principal (`user_id`, `role`). Business routes authorise from that Principal and do not depend on whether the caller used a UI session or a PAT.
+> Users authenticate through Keycloak using OpenID Connect. The browser talks only to the BFF. Nginx is the only public path to FastAPI and exposes `/api/v1/*` only. The BFF calls `/auth/*` over a trusted internal connection. FastAPI turns every accepted credential into one Principal (`user_id`, `role`). Business routes authorise from that Principal and do not depend on whether the caller used a UI session or a PAT.
 >
 > **Database**
 >
-> - [x] User table: UUID id, unique email, password hash, name, role (`user` | `admin`)
+> - [x] User table: UUID id, unique email, name, role, Keycloak subject
 > - [ ] PAT table: token hash, user id, expiry, revoked_at, created_at
-> - [ ] Alembic migration off the bootstrap users stub
+> - [x] Alembic migration off the bootstrap users stub
 >
-> **Keycloak**
+> **Keycloak / BFF**
 >
-> - [ ] Setup Keycloak as the IdP
+> - [x] Configure Keycloak as the OIDC identity provider
+> - [x] BFF login and signup flows use Keycloak
+> - [x] BFF provisions users through `/auth/provision` using the service credential
+> - [ ] Show the authenticated user's name on the home page
 > 
 > **Backend —** `/auth/`* **(not routed by Nginx)**
 >
-> - [x] Password hashing
 > - [x] User service (create, read, update, delete)
 > - [x] Bootstrap admin email (config); every other signup is a basic user
 > - [x] Conflict and unauthorized errors
-> - [ ] BFF service credential; `/auth/*` rejects any other caller
-> - [ ] Move user creation off `POST /api/v1/users` to `POST /auth/signup`
-> - [ ] `POST /auth/login` validates email and password, then returns an internal user JWT
+> - [x] BFF service credential; `/auth/*` rejects any other caller
+> - [x] Provision a Xenon user through internal `POST /auth/provision` after Keycloak sign-in
+> - [ ] Define and implement the API credential handoff from the BFF to FastAPI (validated Keycloak access token or short-lived internal user JWT)
 >
 > **Backend —** `/api/v1/`* **(Nginx only)**
 >
-> - [ ] Principal dependency: internal user JWT or PAT → `user_id` and `role`; return 401 when missing, invalid, expired, or revoked
-> - [ ] Require authentication on every `/api/v1` route, including health and readiness
+> - [ ] Principal dependency: validated API credential or PAT → `user_id` and `role`; return 401 when missing, invalid, expired, or revoked
+> - [ ] Require authentication on business `/api/v1` routes; define health and readiness access separately for infrastructure checks
 > - [ ] `GET`, `PATCH`, `DELETE /api/v1/users/me`, scoped to the authenticated user
 > - [ ] `POST /api/v1/pats` issues a PAT once and stores only its hash
 > - [ ] `DELETE /api/v1/pats/{id}` revokes a PAT owned by the authenticated user
@@ -108,11 +110,9 @@ This document serves as a RoadMap through the lifecycle of this project.
 >
 > **Frontend**
 >
-> - [ ] BFF session cookie: login stores the internal user JWT; logout clears the session
-> - [ ] BFF calls `/auth/*` with the service credential
-> - [ ] BFF sends the internal user JWT as Bearer on `/api/v1/*`
-> - [ ] Signup page
-> - [ ] Login page
-> - [ ] Home page: “Welcome, {name}”
+> - [ ] BFF session cookie: maintain the Keycloak-backed session and clear it on logout
+> - [ ] BFF sends the selected API credential as Bearer on `/api/v1/*`
+> - [x] Signup page
+> - [x] Login page
 > - [ ] PAT create and revoke in the UI
 

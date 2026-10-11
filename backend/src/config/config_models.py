@@ -30,10 +30,31 @@ class ServerConfig(BaseModel):
     port: int
 
 
+class AuthConfig(BaseModel):
+    """
+    Trusted Keycloak Settings for API authentication
+
+    Attributes:
+        issuer: The exact issuer value accepted in access tokens
+        audience: The audience that identifies the Xenon REST API
+        jwks_url: The trusted endpoint used to fetch public signing keys
+    """
+
+    issuer: str
+    audience: str
+    jwks_url: str
+
+
 class Config(BaseModel):
     """
-    Final `Config` class that contains the whole configuration
+    Collect the application settings loaded from config.yaml
+
+    Attributes:
+        app: The application specific (name, version) settings
+        server: The backend server settings
+        auth: The Keycloak token-validation settings
     """
 
     app: AppConfig
     server: ServerConfig
+    auth: AuthConfig

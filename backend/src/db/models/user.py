@@ -41,7 +41,7 @@ class User(Base):
     user_id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: new_uuid("user"))
     email: Mapped[str] = mapped_column(String, unique=True)
     name: Mapped[str] = mapped_column(String)
-    role: Mapped[str] = mapped_column(
+    role: Mapped[UserRole] = mapped_column(
         Enum(UserRole, name="user_role", values_callable=lambda roles: [r.value for r in roles]),
         default=UserRole.BASIC,
         server_default="basic",
